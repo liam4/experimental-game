@@ -7,24 +7,24 @@ module.exports = class Player {
     this.y = 0
     this.s = 4
     this.io = io
-    this.controlDirection = []
+    this.controlDirection = {}
 
     this.io.on('controls', (direction) => {
-      this.controlDirection.push(direction.toString())
+      this.controlDirection[direction] = true
     })
   }
 
   tick() {
-    if (this.controlDirection.includes('up')) {
+    if (this.controlDirection.up) {
       this.y += this.s
     }
-    if (this.controlDirection.includes('down')) {
+    if (this.controlDirection.down) {
       this.y -= this.s
     }
-    if (this.controlDirection.includes('left')) {
+    if (this.controlDirection.left) {
       this.x += this.s
     }
-    if (this.controlDirection.includes('right')) {
+    if (this.controlDirection.right) {
       this.x -= this.s
     }
 
