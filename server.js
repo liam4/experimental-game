@@ -10,6 +10,8 @@ const WORLD_SIZE = 7000
 const INITIAL_PARTICLES = 6000
 
 const path = require('path')
+const filesize = require('file-size')
+
 const World = require('./World')
 
 function launchForever(fn, ms, runNow) {
@@ -61,6 +63,7 @@ http.listen(PORT, () => {
 
   forever.afterTools = () => {
     let msg = `Tick time: ${forever.tickTime}ms`
+    msg += `; Memory usage: ${filesize(process.memoryUsage().rss).human('jedec')}`
     process.stdout.clearLine()
     process.stdout.cursorTo(0)
     process.stdout.write(msg)
