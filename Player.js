@@ -1,3 +1,5 @@
+'use strict'
+
 module.exports = class Player {
   constructor(world, io) {
     this.world = world
@@ -20,10 +22,10 @@ module.exports = class Player {
       this.y -= this.s
     }
     if (this.controlDirection.includes('left')) {
-      this.x -= this.s
+      this.x += this.s
     }
     if (this.controlDirection.includes('right')) {
-      this.x += this.s
+      this.x -= this.s
     }
 
     this.controlDirection = []

@@ -1,3 +1,5 @@
+'use strict'
+
 module.exports = class Quark {
   constructor(world, x, y, direction, speed) {
     this.world = world

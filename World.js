@@ -1,3 +1,5 @@
+'use strict'
+
 const Quark = require('./Quark')
 const Player = require('./Player')
 
@@ -32,6 +34,15 @@ module.exports = class World {
       })
     }
     this.io.emit('world quarks', emitQuarks)
+
+    const emitPlayers = []
+    for (let player of this.players) {
+      emitPlayers.push({
+        x: player.x,
+        y: player.y
+      })
+    }
+    this.io.emit('world players', emitPlayers)
   }
 
   addPlayer(socket) {
