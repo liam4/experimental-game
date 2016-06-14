@@ -30,6 +30,6 @@ module.exports = class Player {
 
     this.controlDirection = []
 
-    this.world.io.emit('position', {x: this.x, y: this.y})
+    this.io.emit('position', {x: this.x, y: this.y})
   }
 }
