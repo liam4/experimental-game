@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Test app</title>
+    <style>
+      body {
+        background: #000;
+      }
+
+      #canvas {
+        border: 1px dashed #333;
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id='canvas' width='400' height='400'></canvas>
+    <script src='/socket.io/socket.io.js'></script>
+    <script>
+      'use strict'
+
+      const socket = io()
+      const canvas = document.getElementById('canvas')
+
+      const allKeys = {}
+      const primaryKeys = []
+
+      let quarks = []
+      let screenX = 0
+      let screenY = 0
+      let zoom = 100 / 100
+
+      socket.on('world quarks', (_quarks) => {
+        quarks = _quarks
+      })
+
+      socket.on('position', (pos) => {
+        screenX = -pos.x
+        screenY = pos.y
+      })
+
+      function tick() {
+        if (allKeys[37]) socket.emit('controls', 'left')
+        if (allKeys[38]) socket.emit('controls', 'up')
+        if (allKeys[39]) socket.emit('controls', 'right')
+        if (allKeys[40]) socket.emit('controls', 'down')
+
+        const ctx = canvas.getContext('2d')
+        ctx.fillStyle = '#111'
+        ctx.fillRect(0, 0, canvas.width, canvas.height)
+        for (let quark of quarks) {
+          const ctx = canvas.getContext('2d')
+          ctx.fillStyle = 'white'
+          ctx.fillRect(
+            screenX - zoom * quark.x,
+            screenY - zoom * quark.y,
+            5, 5)
+        }
+        requestAnimationFrame(tick)
+      }
+
+      tick()
+
+      document.body.addEventListener('keydown', evt => {
+        allKeys[evt.keyCode] = true
+        primaryKeys.push(evt.keyCode)
+      })
+
+      document.body.addEventListener('keyup', evt => {
+        delete allKeys[evt.keyCode]
+        const index = primaryKeys.indexOf(evt.keyCode)
+        if (index >= 0) {
+          primaryKeys.splice(index, 1)
+        }
+      })
+
+      window.addEventListener('blur', evt => {
+        primaryKeys.length = 0
+      })
+    </script>
+  </body>
+</html>
