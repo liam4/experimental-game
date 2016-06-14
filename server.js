@@ -6,6 +6,9 @@ const TICK_RATE = 1000 / 120
 // Port for socket server to use.
 const PORT = 8080
 
+const WORLD_SIZE = 7000
+const INITIAL_PARTICLES = 6000
+
 const path = require('path')
 const World = require('./World')
 
@@ -32,10 +35,10 @@ const http = require('http').Server(app)
 const io = require('socket.io')(http)
 
 const world = new World()
-world.width = 2000
-world.height = 2000
+world.width = WORLD_SIZE
+world.height = WORLD_SIZE
 world.io = io
-world.spaghettiQuarks(2000, 1200)
+world.spaghettiQuarks(INITIAL_PARTICLES, WORLD_SIZE)
 
 app.get('/', (req, res) => {
   res.sendFile(path.resolve('index.html'))
